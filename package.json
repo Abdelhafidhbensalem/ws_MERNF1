@@ -1,0 +1,9 @@
+{
+  "scripts":{
+    "dev":"concurrently \"cd client && npm start\" \"cd backend && npm run back\""
+
+  },
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
