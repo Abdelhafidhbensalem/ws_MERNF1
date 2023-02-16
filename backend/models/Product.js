@@ -4,9 +4,9 @@ const productSchema = new mongoose.Schema({
     price: { type: Number },
     qte: Number,
     createOn: { type: Date, default: Date.now },
-    category: { type: String, enum: ["pc", "telephone"] }
+    category: { type: String, enum: ["pc", "telephone"] },
     //imagesrc  a faire 
-    //user 
+    user: { type: mongoose.Schema.Types.ObjectId }
 })
 const Product = mongoose.model("product", productSchema)
 module.exports = Product

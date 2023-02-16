@@ -40,7 +40,6 @@ export default function AddProduct() {
   const navigate = useNavigate()
   const dispatch= useDispatch()
   const handleSubmit = (event) => {
-    
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({

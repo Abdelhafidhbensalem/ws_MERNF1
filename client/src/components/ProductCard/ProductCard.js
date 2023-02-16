@@ -6,8 +6,11 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { deletedProduct } from '../../Redux/actions/actionsProduct';
 
-export default function ProductCard({el}) {
+export default function ProductCard({ el }) {
+  const dispatch = useDispatch()
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -27,7 +30,7 @@ export default function ProductCard({el}) {
       </CardContent>
       <CardActions>
         <Link to={`/editProduct/${el._id}`}><Button size="small">Edit</Button></Link>
-        <Button size="small">Learn More</Button>
+        <Button size="small" onClick={() => dispatch(deletedProduct(el._id))}>Delete</Button>
       </CardActions>
     </Card>
   );

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,16 +9,14 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import {Link as LinkR, useNavigate, useParams}  from "react-router-dom"
+import { Link as LinkR, useNavigate, useParams } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {  editProduct, getOneProduct } from '../../Redux/actions/actionsProduct';
+import { editProduct, getOneProduct } from '../../Redux/actions/actionsProduct';
 
 function Copyright(props) {
   return (
@@ -36,33 +34,28 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function EditProduct() {
-    const {id}= useParams()
-   
-    
+  const { id } = useParams()
   const [category, setCategory] = React.useState("pc");
   const navigate = useNavigate()
-  const dispatch= useDispatch()
+  const oldProduct = useSelector(state => state.productReducer.oneProduct)
+  const [productUpdate, setProductUpdate] = React.useState(oldProduct)
+  const dispatch = useDispatch()
   React.useEffect(() => {
     dispatch(getOneProduct(id))
-
- 
-}, [id])
+  }, [id])
+  React.useEffect(() => {
+    setProductUpdate(oldProduct)
+  }, [oldProduct])
   const handleSubmit = (event) => {
-    
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       name: data.get('name'),
       price: data.get('price'),
-      qte:data.get('quantity'),
+      qte: data.get('quantity'),
       category
     });
-    dispatch(editProduct({
-      name: data.get('name'),
-      price: data.get('price'),
-      qte:data.get('quantity'),
-      category
-    },navigate,id))
+    dispatch(editProduct(oldProduct._id, productUpdate, navigate))
   };
 
   const handleChange = (event) => {
@@ -84,7 +77,7 @@ export default function EditProduct() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Edit Product 
+            Edit Product
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -95,6 +88,8 @@ export default function EditProduct() {
                   required
                   fullWidth
                   id="name"
+                  value={productUpdate.name}
+                  onChange={(e) => setProductUpdate({ ...productUpdate, name: e.target.value })}
                   label="Name"
                   autoFocus
                 />
@@ -106,6 +101,8 @@ export default function EditProduct() {
                   id="price"
                   label="Price"
                   name="price"
+                  value={productUpdate.price}
+                  onChange={(e) => setProductUpdate({ ...productUpdate, price: e.target.value })}
                   type='number'
                 />
               </Grid>
@@ -116,6 +113,8 @@ export default function EditProduct() {
                   id="quantity"
                   label="Quantity"
                   name="quantity"
+                  value={productUpdate.qte}
+                  onChange={(e) => setProductUpdate({ ...productUpdate, qte: e.target.value })}
                   type="number"
                 />
               </Grid>
@@ -137,27 +136,27 @@ export default function EditProduct() {
                 </Box>
               </Grid>
               <Grid item xs={12} >
-              <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Edit
-            </Button>
-            <LinkR to="/">
-            <Button
-              type="reset"
-              fullWidth
-              variant="contained"
-              sx={{ mb: 2 }}
-            >
-              Cancel
-            </Button>
-            </LinkR>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Edit
+                </Button>
+                <LinkR to="/">
+                  <Button
+                    type="reset"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mb: 2 }}
+                  >
+                    Cancel
+                  </Button>
+                </LinkR>
               </Grid>
             </Grid>
-           
+
           </Box>
         </Box>
         <Copyright sx={{ mt: 5 }} />
