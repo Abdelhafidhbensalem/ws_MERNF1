@@ -10,6 +10,13 @@ export const register = (newUser, navigate) => async (dispatch) => {
     } catch (error) {
         console.log(error);
         dispatch({ type: REGISTER_FAIL, payload: error })
+        if (error.response.data.msg) { alert(error.response.data.msg) }
+        else {
+            error.response.data.errors.forEach(el => {
+                alert(el.msg)
+
+            });
+        }
     }
 
 }
@@ -18,21 +25,22 @@ export const register = (newUser, navigate) => async (dispatch) => {
 export const login = (loginUser, navigate) => async (dispatch) => {
     try {
         const res = await axios.post("http://localhost:5000/api/user/login", loginUser)
-        dispatch({ type: LOGIN_SUCCESS,payload:res.data })
+        dispatch({ type: LOGIN_SUCCESS, payload: res.data })
         navigate("/dashboard")
         //alert(res.data.msg)
     } catch (error) {
         console.log(error);
         dispatch({ type: LOGIN_FAIL, payload: error })
+        alert(error.response.data.msg)
     }
 
 }
 
 export const getCurrent = () => async (dispatch) => {
-    const token=localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     try {
-        const res = await axios.get("http://localhost:5000/api/user/current",{headers:{Authorization:`Bearer ${token}`}} )
-        dispatch({ type: GET_CURRENT_SUCCESS,payload:res.data })
+        const res = await axios.get("http://localhost:5000/api/user/current", { headers: { Authorization: `Bearer ${token}` } })
+        dispatch({ type: GET_CURRENT_SUCCESS, payload: res.data })
         //alert(res.data.msg)
     } catch (error) {
         console.log(error);
@@ -41,6 +49,6 @@ export const getCurrent = () => async (dispatch) => {
 
 }
 
-export const logout=()=>{
-return {type: LOGOUT}
+export const logout = () => {
+    return { type: LOGOUT }
 }

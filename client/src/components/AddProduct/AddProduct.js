@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import {Link as LinkR, useNavigate}  from "react-router-dom"
+import { Link as LinkR, useNavigate } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -37,23 +37,18 @@ const theme = createTheme();
 
 export default function AddProduct() {
   const [category, setCategory] = React.useState("pc");
+  const [img, setImg] = React.useState("");
+  const [name, setName] = React.useState("");
   const navigate = useNavigate()
-  const dispatch= useDispatch()
+  const dispatch = useDispatch()
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      price: data.get('price'),
-      qte:data.get('quantity'),
-      category
-    });
-    dispatch(addProduct({
-      name: data.get('name'),
-      price: data.get('price'),
-      qte:data.get('quantity'),
-      category
-    },navigate))
+    const data = new FormData();
+    data.append("name", name)
+    data.append("category", category)
+    data.append("file", img)
+
+    dispatch(addProduct(data, navigate))
   };
 
   const handleChange = (event) => {
@@ -88,6 +83,8 @@ export default function AddProduct() {
                   id="name"
                   label="Name"
                   autoFocus
+                  onChange={(e) => setName(e.target.value
+                  )}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -110,6 +107,17 @@ export default function AddProduct() {
                   type="number"
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="file"
+                  label="Image"
+                  name="file"
+                  type="file"
+                  onChange={(e) => setImg(e.target.files[0])}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <Box sx={{ minWidth: 120 }}>
                   <FormControl fullWidth>
@@ -128,27 +136,27 @@ export default function AddProduct() {
                 </Box>
               </Grid>
               <Grid item xs={12} >
-              <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Save
-            </Button>
-            <LinkR to="/">
-            <Button
-              type="reset"
-              fullWidth
-              variant="contained"
-              sx={{ mb: 2 }}
-            >
-              Cancel
-            </Button>
-            </LinkR>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Save
+                </Button>
+                <LinkR to="/">
+                  <Button
+                    type="reset"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mb: 2 }}
+                  >
+                    Cancel
+                  </Button>
+                </LinkR>
               </Grid>
             </Grid>
-           
+
           </Box>
         </Box>
         <Copyright sx={{ mt: 5 }} />

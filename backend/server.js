@@ -11,6 +11,7 @@ const corsOptions = {
    optionSuccessStatus: 200,
 }
 
+app.use("/uploads",express.static(__dirname+"/uploads"))
 app.use(cors(corsOptions))
 app.use(express.json())
 

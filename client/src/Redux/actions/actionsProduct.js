@@ -22,8 +22,10 @@ export const getAllProducts = () => async (dispatch) => {
   }
 }
 export const addProduct = (productBody, navigate) => async (dispatch) => {
+  
+  const token=localStorage.getItem('token');
   try {
-    const resProduct = await axios.post('http://localhost:5000/api/product/', productBody)
+    const resProduct = await axios.post('http://localhost:5000/api/product/', productBody,{ headers: { Authorization: `Bearer ${token}` } })
     dispatch({
       type: ADD_PRODUCT_SUCCESS,
       payload: resProduct.data

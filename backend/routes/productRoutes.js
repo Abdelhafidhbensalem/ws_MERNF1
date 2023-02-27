@@ -1,13 +1,19 @@
 const express = require("express")
 const isAuth = require("../middlewares/isAuth")
-
+const upload = require("../utils/multer")
 const router = express.Router()
 const Product = require("../models/Product")
 
 //add new product
-router.post("/",isAuth(), async (req, res) => {
+router.post("/", isAuth(), upload("products").single("file"), async (req, res) => {
     try {
-        const newProduct = new Product({...req.body,user:req.user._id})
+        //console.log(req.protocol);
+        //console.log(req.get("host"));
+        //console.log(req.file);
+        const url = `${req.protocol}://${req.get("host")}/${req.file.path}`
+        const newProduct = new Product({ ...req.body, user: req.user._id })
+        newProduct.imagesrc = url
+
         await newProduct.save()
         res.send({ msg: "product  add succes", product: newProduct })
     } catch (error) {
@@ -22,7 +28,7 @@ router.get("/", async (req, res) => {
     try {
         console.log(req.query)
 
-        const products = await Product.find({ name: { $regex: req.query.name || "", $options: "i" } }).sort({ createOn: -1 })
+        const products = await Product.find({ name: { $regex: req.query.name || "", $options: "i" } }).sort({ createOn: -1 }).populate("user","name")
         res.send(products)
     }
     catch (error) {
@@ -42,7 +48,7 @@ router.get("/:id", async (req, res) => {
     }
 })
 //edit product
-router.put("/:id",isAuth(), async (req, res) => {
+router.put("/:id", isAuth(), async (req, res) => {
     try {
 
         const result = await Product.updateOne({ _id: req.params.id }, { ...req.body })
@@ -58,7 +64,7 @@ router.put("/:id",isAuth(), async (req, res) => {
     }
 })
 //delete product
-router.delete("/:id",isAuth(), async (req, res) => {
+router.delete("/:id", isAuth(), async (req, res) => {
     try {
 
         const result = await Product.deleteOne({ _id: req.params.id })

@@ -5,8 +5,8 @@ const productSchema = new mongoose.Schema({
     qte: Number,
     createOn: { type: Date, default: Date.now },
     category: { type: String, enum: ["pc", "telephone"] },
-    //imagesrc  a faire 
-    user: { type: mongoose.Schema.Types.ObjectId }
+    imagesrc :{type: String},
+    user: { type: mongoose.Schema.Types.ObjectId,ref:"user" }
 })
 const Product = mongoose.model("product", productSchema)
 module.exports = Product

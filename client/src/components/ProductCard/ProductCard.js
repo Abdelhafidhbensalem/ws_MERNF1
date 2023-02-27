@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deletedProduct } from '../../Redux/actions/actionsProduct';
 
 export default function ProductCard({ el }) {
-  const currentUser=useSelector(state=>state.userReducer.currentUser)
+  const currentUser = useSelector(state => state.userReducer.currentUser)
   const dispatch = useDispatch()
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -18,7 +18,7 @@ export default function ProductCard({ el }) {
         component="img"
         alt="green iguana"
         height="140"
-        image="/static/images/cards/contemplative-reptile.jpg"
+        image={el.imagesrc}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -31,7 +31,7 @@ export default function ProductCard({ el }) {
       </CardContent>
       <CardActions>
         <Link to={`/editProduct/${el._id}`}><Button size="small">Edit</Button></Link>
-        {localStorage.getItem("token") &&currentUser.role=="admin"&& <Button size="small" onClick={() => dispatch(deletedProduct(el._id))}>Delete</Button>}
+        {localStorage.getItem("token") && currentUser.role == "admin" && <Button size="small" onClick={() => dispatch(deletedProduct(el._id))}>Delete</Button>}
       </CardActions>
     </Card>
   );
